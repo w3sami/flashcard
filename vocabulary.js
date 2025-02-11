@@ -1,314 +1,250 @@
 const vocabulary = [
     {
-        "term": "en skola, skolan, skolor, skolorna",
-        "translation": "koulu",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "ett betyg, betyget, betyg, betygen",
-        "translation": "arvosana",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "ett slutbetyg, slutbetyget",
-        "translation": "päättötodistus",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "ett medeltal",
-        "translation": "keskiarvo",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "en dubbelexamen",
-        "translation": "kaksoistutkinto",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "en studiehandledare",
-        "translation": "opinto-ohjaaja",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "gymnasiet",
-        "translation": "lukio",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "yrkesskolan",
-        "translation": "ammattikoulu",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "merkonomlinjen",
-        "translation": "merkonomilinja",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "katedralskolan",
-        "translation": "ruotsinkielinen lukio",
-        "category": "schoolTerms",
-        "type": "nouns"
-    },
-    {
-        "term": "gå i skolan",
-        "translation": "käydä koulua",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "söka till gymnasiet",
-        "translation": "hakea lukioon",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "komma in på gymnasiet",
-        "translation": "päästä lukioon",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "få betyg",
-        "translation": "saada arvosana",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "efter grundskolan",
-        "translation": "peruskoulun jälkeen",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "på hösten",
-        "translation": "syksyllä",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "gå i högstadiet",
-        "translation": "käydä yläkoulua",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "gå i lågstadiet",
-        "translation": "käydä alakoulua",
-        "category": "schoolTerms",
-        "type": "phrases"
-    },
-    {
-        "term": "studera, studerar, studerade",
-        "translation": "opiskella",
-        "category": "verbs",
-        "type": "basic"
+        "term": "fundera, funderar, funderade, funderat på",
+        "translation": "miettiä jotakin"
     },
     {
         "term": "välja, väljer, valde, valt",
-        "translation": "valita",
-        "category": "verbs",
-        "type": "basic"
+        "translation": "valita"
     },
     {
-        "term": "förstå, förstår, förstod",
-        "translation": "ymmärtää",
-        "category": "verbs",
-        "type": "basic"
+        "term": "göra, gör, gjorde, gjort",
+        "translation": "tehdä"
     },
     {
-        "term": "tänka, tänker, tänkte",
-        "translation": "ajatella",
-        "category": "verbs",
-        "type": "basic"
+        "term": "efter",
+        "translation": "jonkun jälkeen"
     },
     {
-        "term": "vara, är, var, varit",
-        "translation": "olla",
-        "category": "verbs",
-        "type": "basic"
+        "term": "veta, vet, visste, vetat",
+        "translation": "tietää"
     },
     {
-        "term": "börja",
-        "translation": "aloittaa",
-        "category": "verbs",
-        "type": "basic"
+        "term": "mig passar",
+        "translation": "minulle sopii"
     },
     {
-        "term": "tro",
-        "translation": "uskoa",
-        "category": "verbs",
-        "type": "basic"
+        "term": "både - och",
+        "translation": "sekä - että"
     },
     {
-        "term": "veta",
-        "translation": "tietää",
-        "category": "verbs",
-        "type": "basic"
+        "term": "jag lär mig bäst",
+        "translation": "opin parhaiten"
     },
     {
-        "term": "bli intresserad av",
-        "translation": "kiinnostua jostakin",
-        "category": "verbs",
-        "type": "phrases"
+        "term": "när",
+        "translation": "kun"
     },
     {
-        "term": "ha kontakt",
-        "translation": "olla yhteydessä",
-        "category": "verbs",
-        "type": "phrases"
-    },
-    {
-        "term": "vara rädd för",
-        "translation": "pelätä jotakin",
-        "category": "verbs",
-        "type": "phrases"
-    },
-    {
-        "term": "fundera på",
-        "translation": "miettiä jotakin",
-        "category": "verbs",
-        "type": "phrases"
-    },
-    {
-        "term": "påverka",
-        "translation": "vaikuttaa",
-        "category": "verbs",
-        "type": "phrases"
-    },
-    {
-        "term": "träffas",
-        "translation": "tavata toisensa",
-        "category": "verbs",
-        "type": "phrases"
-    },
-    {
-        "term": "bli färdig",
-        "translation": "valmistua",
-        "category": "verbs",
-        "type": "phrases"
-    },
-    {
-        "term": "klara sig",
-        "translation": "pärjätä",
-        "category": "verbs",
-        "type": "phrases"
-    },
-    {
-        "term": "stressig/stressigt",
-        "translation": "stressaava",
-        "category": "adjectives",
-        "type": "regular"
-    },
-    {
-        "term": "tung/tungt/tunga",
-        "translation": "raskas, painava",
-        "category": "adjectives",
-        "type": "regular"
-    },
-    {
-        "term": "jättesvår/jättesvårt",
-        "translation": "tosi vaikea",
-        "category": "adjectives",
-        "type": "regular"
-    },
-    {
-        "term": "jättetråkig/jättetråkigt",
-        "translation": "tosi tylsä",
-        "category": "adjectives",
-        "type": "regular"
-    },
-    {
-        "term": "jättenervös",
-        "translation": "tosi hermostunut",
-        "category": "adjectives",
-        "type": "regular"
-    },
-    {
-        "term": "jobbig",
-        "translation": "raskas, työläs",
-        "category": "adjectives",
-        "type": "regular"
+        "term": "en sak, saken, saker, sakerna",
+        "translation": "asia, esine, tavara"
     },
     {
         "term": "egentligen",
-        "translation": "oikeastaan",
-        "category": "adjectives",
-        "type": "adverbs"
+        "translation": "oikeastaan"
     },
     {
-        "term": "ganska",
-        "translation": "aika, melko",
-        "category": "adjectives",
-        "type": "adverbs"
+        "term": "ändå",
+        "translation": "kuitenkin"
     },
     {
-        "term": "säkert",
-        "translation": "varmasti",
-        "category": "adjectives",
-        "type": "adverbs"
+        "term": "för",
+        "translation": "sillä"
     },
     {
-        "term": "lite",
-        "translation": "vähän, hieman",
-        "category": "adjectives",
-        "type": "adverbs"
-    },
-    {
-        "term": "igen",
-        "translation": "taas",
-        "category": "adjectives",
-        "type": "adverbs"
-    },
-    {
-        "term": "där",
-        "translation": "siellä",
-        "category": "adjectives",
-        "type": "adverbs"
-    },
-    {
-        "term": "en månad, månaden",
-        "translation": "kuukausi",
-        "category": "timeAndLocation",
-        "type": "time"
-    },
-    {
-        "term": "varje dag",
-        "translation": "joka päivä",
-        "category": "timeAndLocation",
-        "type": "time"
-    },
-    {
-        "term": "senare",
-        "translation": "myöhemmin",
-        "category": "timeAndLocation",
-        "type": "time"
+        "term": "framtid, framtiden",
+        "translation": "tulevaisuus"
     },
     {
         "term": "tre år till",
-        "translation": "vielä kolme vuotta",
-        "category": "timeAndLocation",
-        "type": "time"
+        "translation": "vielä kolme vuotta"
+    },
+    {
+        "term": "intresserad / intresserat / intresserade av",
+        "translation": "kiinnostunut jostakin"
+    },
+    {
+        "term": "ekonomi",
+        "translation": "talous"
     },
     {
         "term": "Lilla Hanken",
-        "translation": "ruotsinkielinen kaupallinen oppilaitos",
-        "category": "timeAndLocation",
-        "type": "location"
+        "translation": "ruotsinkielinen kaupallisen alan oppilaitos Turussa"
     },
     {
-        "term": "framtid",
-        "translation": "tulevaisuus",
-        "category": "timeAndLocation",
-        "type": "location"
+        "term": "där",
+        "translation": "siellä"
+    },
+    {
+        "term": "studera, studerar, studerade, studerat",
+        "translation": "opiskella"
+    },
+    {
+        "term": "till merkonom",
+        "translation": "merkonomiksi"
+    },
+    {
+        "term": "jättesvår, jättesvårt, jättesvåra",
+        "translation": "tosi vaikea"
+    },
+    {
+        "term": "katedralskolan",
+        "translation": "ruotsinkielinen lukio Turussa"
+    },
+    {
+        "term": "tänka, tänker, tänkte, tänkt på",
+        "translation": "ajatella jotakin"
+    },
+    {
+        "term": "varje dag",
+        "translation": "joka päivä"
+    },
+    {
+        "term": "kännas, känns, kändes, känts",
+        "translation": "tuntua"
+    },
+    {
+        "term": "lite",
+        "translation": "vähän, hieman"
+    },
+    {
+        "term": "stressig, stressigt, stressiga",
+        "translation": "stressaava"
+    },
+    {
+        "term": "påverka",
+        "translation": "vaikuttaa johonkin"
+    },
+    {
+        "term": "en månad, månaden, månader, månaderna",
+        "translation": "kuukausi"
+    },
+    {
+        "term": "senare",
+        "translation": "myöhemmin"
+    },
+    {
+        "term": "träffas, träffas, träffades, träffats",
+        "translation": "tavata (toisensa)"
+    },
+    {
+        "term": "igen",
+        "translation": "taas"
+    },
+    {
+        "term": "efter grundskolan",
+        "translation": "peruskoulun jälkeen"
+    },
+    {
+        "term": "börja, börjar, började, börjat",
+        "translation": "aloittaa, alkaa"
+    },
+    {
+        "term": "på hösten",
+        "translation": "syksyllä"
+    },
+    {
+        "term": "jättenervös, jättenervöst, jättenervösa",
+        "translation": "tosi hermostunut"
+    },
+    {
+        "term": "bland de sista",
+        "translation": "viimeisten joukossa"
+    },
+    {
+        "term": "som",
+        "translation": "joka, jotka"
+    },
+    {
+        "term": "Grattis!",
+        "translation": "Onnea!"
+    },
+    {
+        "term": "på merkonomlinjen",
+        "translation": "merkonomilinjalle"
+    },
+    {
+        "term": "ganska",
+        "translation": "aika, melko"
+    },
+    {
+        "term": "tung / tungt / tunga",
+        "translation": "raskas, painava"
+    },
+    {
+        "term": "för mig",
+        "translation": "minulle"
+    },
+    {
+        "term": "bli, blir, blev, blivit",
+        "translation": "tulla joksikin"
+    },
+    {
+        "term": "säkert",
+        "translation": "varmasti"
+    },
+    {
+        "term": "kul",
+        "translation": "kiva"
+    },
+    {
+        "term": "fast",
+        "translation": "vaikka"
+    },
+    {
+        "term": "vara, är, var, varit rädd för",
+        "translation": "pelätä jotakin, olla peloissaan"
+    },
+    {
+        "term": "som vi kommer att få",
+        "translation": "joita tulemme saamaan"
+    },
+    {
+        "term": "jobbig / jobbigt / jobbiga",
+        "translation": "raskas, työläs"
+    },
+    {
+        "term": "ha, har, hade, haft kontakt",
+        "translation": "olla yhteydessä"
+    },
+    {
+        "term": "förstå, förstår, förstod, förstått",
+        "translation": "ymmärtää"
+    },
+    {
+        "term": "några av mina kompisar",
+        "translation": "jotkut kavereistani"
+    },
+    {
+        "term": "jättetråkig / jättetråkigt / jättetråkiga",
+        "translation": "tosi tylsä"
+    },
+    {
+        "term": "tionde klassen",
+        "translation": "kymppiluokka"
+    },
+    {
+        "term": "en annan",
+        "translation": "toinen"
+    },
+    {
+        "term": "ny / nytt / nya",
+        "translation": "uusi"
+    },
+    {
+        "term": "tro, tror, trodde, trott",
+        "translation": "uskoa, luulla"
+    },
+    {
+        "term": "lättare",
+        "translation": "helpompi"
+    },
+    {
+        "term": "vara, är, var, varit bra i",
+        "translation": "olla hyvä jossakin"
+    },
+    {
+        "term": "om man verkligen är",
+        "translation": "jos todellakin on"
     }
 ];

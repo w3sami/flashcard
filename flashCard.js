@@ -80,7 +80,12 @@ class SpeechService {
 
 class FlashcardApp {
   constructor() {
-    this.cards = [...vocabulary];
+    this.vocabularies = {
+      vocabulary1: vocabulary,
+      vocabulary2: vocabulary2
+    };
+    this.currentVocabulary = 'vocabulary1';
+    this.cards = [...this.vocabularies[this.currentVocabulary]];
     this.currentIndex = 0;
     this.isFlipped = false;
     this.rejectedCards = [];
@@ -91,12 +96,17 @@ class FlashcardApp {
     this.initializeUI();
     this.attachEventListeners();
     this.speechService.init();
+    this.handleRestart();
   }
 
   initializeUI() {
     document.body.innerHTML = `
       <div class="container">
         <div class="controls">
+          <select id="vocabularySelect">
+            <option value="vocabulary1">Vocabulary 1</option>
+            <option value="vocabulary2">Vocabulary 2</option>
+          </select>
           <select id="languageSelect">
             <option value="swedish">Swedish First</option>
             <option value="finnish">Finnish First</option>
@@ -161,6 +171,11 @@ class FlashcardApp {
   }
 
   attachEventListeners() {
+    document.getElementById('vocabularySelect').addEventListener('change', (e) => {
+      this.currentVocabulary = e.target.value;
+      this.handleRestart();
+    });
+
     document.getElementById('languageSelect').addEventListener('change', (e) => {
       this.firstLanguage = e.target.value;
       this.updateCard();
@@ -224,7 +239,7 @@ class FlashcardApp {
     this.isFlipped = false;
     this.rejectedCards = [];
     this.showingRejected = false;
-    this.cards = [...vocabulary];
+    this.cards = [...this.vocabularies[this.currentVocabulary]];
     this.updateCard();
     document.getElementById('processRejectedBtn').textContent = 'Process Rejected (0)';
   }
