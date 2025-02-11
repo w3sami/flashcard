@@ -5,35 +5,60 @@ class SpeechService {
     this.swedishVoice = null;
     this.timeout = null;
     this.enabled = true;
+    this.isInitialized = false;
   }
 
   async init() {
-    // Wait for voices to be loaded
-    if (this.synth.getVoices().length === 0) {
-      await new Promise(resolve => {
-        this.synth.addEventListener('voiceschanged', resolve, { once: true });
-      });
+    try {
+      // Check if speech synthesis is available
+      if (!('speechSynthesis' in window)) {
+        console.log('Speech synthesis not available');
+        return false;
+      }
+
+      // iOS Safari specific: need to wait a bit before getting voices
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Get voices with retry mechanism
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      while (attempts < maxAttempts) {
+        const voices = this.synth.getVoices();
+        if (voices.length > 0) {
+          // Try to find Finnish voice
+          this.finnishVoice = voices.find(voice =>
+              voice.name.toLowerCase() === 'satu' && voice.lang === 'fi-FI'
+          ) || voices.find(voice => voice.lang === 'fi-FI');
+
+          // Try to find Swedish voice (Siri)
+          this.swedishVoice = voices.find(voice =>
+              voice.name.toLowerCase().includes('siri') && voice.lang === 'sv-SE'
+          ) || voices.find(voice => voice.lang === 'sv-SE');
+
+          console.log('Voices loaded:', {
+            totalVoices: voices.length,
+            finnish: this.finnishVoice?.name,
+            swedish: this.swedishVoice?.name
+          });
+
+          // Initialize with empty utterance
+          this.synth.speak(new SpeechSynthesisUtterance(''));
+
+          this.isInitialized = true;
+          return true;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+
+      console.log('Could not load voices after multiple attempts');
+      return false;
+    } catch (error) {
+      console.log('Speech service initialization error:', error);
+      return false;
     }
-
-    const voices = this.synth.getVoices();
-    
-    // Try to find Finnish voice
-    this.finnishVoice = voices.find(voice => 
-      voice.name.toLowerCase() === 'satu' && voice.lang === 'fi-FI'
-    ) || voices.find(voice => voice.lang === 'fi-FI');
-
-    // Try to find Swedish voice (Siri)
-    this.swedishVoice = voices.find(voice => 
-      voice.name.toLowerCase().includes('siri') && voice.lang === 'sv-SE'
-    ) || voices.find(voice => voice.lang === 'sv-SE');
-
-    console.log('Available voices:', {
-      finnish: voices.filter(voice => voice.lang === 'fi-FI').map(v => v.name),
-      swedish: voices.filter(voice => voice.lang === 'sv-SE').map(v => v.name)
-    });
-
-    // Initialize with empty utterance
-    this.synth.speak(new SpeechSynthesisUtterance(''));
   }
 
   setEnabled(enabled) {
@@ -44,59 +69,97 @@ class SpeechService {
   }
 
   stop() {
-    this.synth.cancel();
+    try {
+      this.synth.cancel();
+    } catch (error) {
+      console.log('Error stopping speech:', error);
+    }
   }
 
   speak(text, voice, lang) {
-    if (!this.enabled) return Promise.resolve(false);
-    
+    if (!this.enabled || !this.isInitialized) return Promise.resolve(false);
+
     return new Promise((resolve) => {
-      if (this.synth.speaking || this.timeout) {
-        console.error('speechSynthesis.speaking');
+      try {
+        if (!text || !voice) {
+          resolve(false);
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = voice;
+        utterance.lang = lang;
+
+        utterance.onend = () => resolve(true);
+        utterance.onerror = (event) => {
+          console.log(`Speech synthesis error: ${event.error}`);
+          resolve(false);
+        };
+
+        // iOS Safari specific: Clear any existing speech
+        this.synth.cancel();
+
+        // Small delay before speaking
+        setTimeout(() => {
+          try {
+            this.synth.speak(utterance);
+          } catch (error) {
+            console.log('Error speaking:', error);
+            resolve(false);
+          }
+        }, 100);
+      } catch (error) {
+        console.log('Error in speak function:', error);
         resolve(false);
-        return;
       }
-
-      if (!text || !voice) {
-        resolve(false);
-        return;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(text);
-
-      utterance.onend = () => resolve(true);
-      utterance.onerror = (event) => {
-        console.error(`Speech synthesis error: ${event.error}`);
-        resolve(false);
-      };
-
-      this.timeout = setTimeout(() => {
-        this.timeout = null;
-        this.synth.speak(utterance);
-      }, 200);
     });
   }
 }
 
 class FlashcardApp {
   constructor() {
-    this.vocabularies = {
-      vocabulary1: vocabulary,
-      vocabulary2: vocabulary2
-    };
-    this.currentVocabulary = 'vocabulary1';
-    this.cards = [...this.vocabularies[this.currentVocabulary]];
-    this.currentIndex = 0;
-    this.isFlipped = false;
-    this.rejectedCards = [];
-    this.showingRejected = false;
-    this.firstLanguage = 'swedish';
-    this.speechService = new SpeechService();
-    
     this.initializeUI();
-    this.attachEventListeners();
-    this.speechService.init();
-    this.handleRestart();
+    this.setupApp();
+  }
+
+  async setupApp() {
+    try {
+      this.vocabularies = {
+        vocabulary1: vocabulary,
+        vocabulary2: vocabulary2
+      };
+      this.currentVocabulary = 'vocabulary1';
+      this.cards = [...this.vocabularies[this.currentVocabulary]];
+      this.currentIndex = 0;
+      this.isFlipped = false;
+      this.rejectedCards = [];
+      this.showingRejected = false;
+      this.firstLanguage = 'swedish';
+
+      // Initialize speech service
+      this.speechService = new SpeechService();
+      const speechInitialized = await this.speechService.init();
+
+      // Update UI based on speech availability
+      document.getElementById('voiceEnabled').checked = speechInitialized;
+      document.getElementById('voiceEnabled').disabled = !speechInitialized;
+
+      this.attachEventListeners();
+      this.handleRestart();
+
+      // Show status message
+      this.updateStatus(speechInitialized ? 'App ready' : 'App ready (voice not available)');
+    } catch (error) {
+      this.updateStatus('Error initializing app. Please refresh the page.');
+      console.log('Setup error:', error);
+    }
+  }
+
+  updateStatus(message) {
+    const status = document.getElementById('status');
+    if (status) {
+      status.textContent = message;
+    }
   }
 
   initializeUI() {
@@ -166,6 +229,7 @@ class FlashcardApp {
       .buttons, .navigation { margin: 1em 0; }
       button { margin: 0 0.5em; padding: 0.5em 1em; }
       .content { font-size: 1.5em; }
+      .status { margin-top: 1em; padding: 0.5em; color: #666; }
     `;
     document.head.appendChild(style);
   }
@@ -230,8 +294,8 @@ class FlashcardApp {
       this.isFlipped = false;
       this.updateCard();
     }
-    document.getElementById('processRejectedBtn').textContent = 
-      `Process Rejected (${this.rejectedCards.length})`;
+    document.getElementById('processRejectedBtn').textContent =
+        `Process Rejected (${this.rejectedCards.length})`;
   }
 
   handleRestart() {
@@ -257,7 +321,6 @@ class FlashcardApp {
   }
 }
 
-// Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
   new FlashcardApp();
 });
