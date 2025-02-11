@@ -1,8 +1,10 @@
 class SpeechService {
   constructor() {
     this.synth = window.speechSynthesis;
-    this.voice = null;
+    this.finnishVoice = null;
+    this.swedishVoice = null;
     this.timeout = null;
+    this.enabled = true;
   }
 
   async init() {
@@ -13,24 +15,41 @@ class SpeechService {
       });
     }
 
-    // Try to find Finnish voice
     const voices = this.synth.getVoices();
-    this.voice = voices.find(voice => 
+    
+    // Try to find Finnish voice
+    this.finnishVoice = voices.find(voice => 
       voice.name.toLowerCase() === 'satu' && voice.lang === 'fi-FI'
     ) || voices.find(voice => voice.lang === 'fi-FI');
 
-    console.log(voices, voices.filter(voice => voice.lang === 'fi-FI').map(v => v.name));
+    // Try to find Swedish voice (Siri)
+    this.swedishVoice = voices.find(voice => 
+      voice.name.toLowerCase().includes('siri') && voice.lang === 'sv-SE'
+    ) || voices.find(voice => voice.lang === 'sv-SE');
+
+    console.log('Available voices:', {
+      finnish: voices.filter(voice => voice.lang === 'fi-FI').map(v => v.name),
+      swedish: voices.filter(voice => voice.lang === 'sv-SE').map(v => v.name)
+    });
 
     // Initialize with empty utterance
     this.synth.speak(new SpeechSynthesisUtterance(''));
+  }
+
+  setEnabled(enabled) {
+    this.enabled = enabled;
+    if (!enabled) {
+      this.stop();
+    }
   }
 
   stop() {
     this.synth.cancel();
   }
 
-  speak(text) {
-    return;
+  speak(text, voice, lang) {
+    if (!this.enabled) return Promise.resolve(false);
+    
     return new Promise((resolve) => {
       if (this.synth.speaking || this.timeout) {
         console.error('speechSynthesis.speaking');
@@ -38,15 +57,12 @@ class SpeechService {
         return;
       }
 
-      if (!text) {
+      if (!text || !voice) {
         resolve(false);
         return;
       }
 
       const utterance = new SpeechSynthesisUtterance(text);
-      if (this.voice) {
-        utterance.voice = this.voice;
-      }
 
       utterance.onend = () => resolve(true);
       utterance.onerror = (event) => {
@@ -85,6 +101,10 @@ class FlashcardApp {
             <option value="swedish">Swedish First</option>
             <option value="finnish">Finnish First</option>
           </select>
+          <label class="voice-toggle">
+            <input type="checkbox" id="voiceEnabled" checked>
+            Enable Voice
+          </label>
         </div>
 
         <div class="flashcard" id="flashcard">
@@ -110,6 +130,19 @@ class FlashcardApp {
     const style = document.createElement('style');
     style.textContent = `
       .container { max-width: 600px; margin: 2em auto; text-align: center; }
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1em;
+        margin-bottom: 1em;
+      }
+      .voice-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        cursor: pointer;
+      }
       .flashcard { 
         width: 400px; 
         height: 200px; 
@@ -133,6 +166,10 @@ class FlashcardApp {
       this.updateCard();
     });
 
+    document.getElementById('voiceEnabled').addEventListener('change', (e) => {
+      this.speechService.setEnabled(e.target.checked);
+    });
+
     document.getElementById('showBtn').addEventListener('click', () => this.handleShow());
     document.getElementById('acceptBtn').addEventListener('click', () => this.handleAccept());
     document.getElementById('rejectBtn').addEventListener('click', () => this.handleReject());
@@ -145,16 +182,16 @@ class FlashcardApp {
     const card = this.cards[this.currentIndex];
     if (!card) return;
 
-    const content = this.isFlipped ? 
-      (this.firstLanguage === 'swedish' ? card.translation : card.term) :
-      (this.firstLanguage === 'swedish' ? card.term : card.translation);
+    const language = this.isFlipped
+        ? (this.firstLanguage === 'swedish' ? 'finnish' : 'swedish')
+        : this.firstLanguage;
 
-    document.querySelector('.content').textContent = content;
-
-    if (this.isFlipped) {
-      // Speak the translation when card is flipped
-      const textToSpeak = this.firstLanguage === 'swedish' ? card.translation : card.term;
-      this.speechService.speak(textToSpeak);
+    if (language === 'finnish') {
+      document.querySelector('.content').textContent = card.translation;
+      this.speechService.speak(card.translation, this.speechService.finnishVoice, 'fi-FI');
+    } else {
+      document.querySelector('.content').textContent = card.term;
+      this.speechService.speak(card.term, this.speechService.swedishVoice, 'sv-SE');
     }
   }
 
