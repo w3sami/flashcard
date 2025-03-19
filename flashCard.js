@@ -126,7 +126,8 @@ class FlashcardApp {
     try {
       this.vocabularies = {
         vocabulary1: vocabulary,
-        vocabulary2: vocabulary2
+        vocabulary2: vocabulary2,
+        vocabulary3: vocabulary3
       };
       this.currentVocabulary = 'vocabulary1';
       this.cards = [...this.vocabularies[this.currentVocabulary]];
